@@ -1,136 +1,205 @@
-import React, { cloneElement, Component } from 'react';
-import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
-import cx from 'classnames';
+'use strict';
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.DropdownContent = exports.DropdownTrigger = undefined;
 
-import DropdownTrigger from './dropdown-trigger.js';
-import DropdownContent from './dropdown-content.js';
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-class Dropdown extends Component {
-  displayName: 'Dropdown'
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  componentDidMount () {
-    window.addEventListener('click', this._onWindowClick);
-    window.addEventListener('touchstart', this._onWindowClick);
-  }
+var _react = require('react');
 
-  componentWillUnmount () {
-    window.removeEventListener('click', this._onWindowClick);
-    window.removeEventListener('touchstart', this._onWindowClick);
-  }
+var _react2 = _interopRequireDefault(_react);
 
-  constructor (props) {
-    super(props);
+var _propTypes = require('prop-types');
 
-    this.state = {
-      active: false
-    };
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
-    this._onWindowClick = this._onWindowClick.bind(this);
-    this._onToggleClick = this._onToggleClick.bind(this);
-  }
+var _reactDom = require('react-dom');
 
-  isActive () {
-    return (typeof this.props.active === 'boolean') ?
-      this.props.active :
-      this.state.active;
-  }
+var _classnames = require('classnames');
 
-  hide () {
-    this.setState({
-      active: false
-    }, () => {
-      if (this.props.onHide) {
-        this.props.onHide();
-      }
-    });
-  }
+var _classnames2 = _interopRequireDefault(_classnames);
 
-  show () {
-    this.setState({
-      active: true
-    }, () => {
-      if (this.props.onShow) {
-        this.props.onShow();
-      }
-    });
-  }
+var _dropdownTrigger = require('./dropdown-trigger.js');
 
-  _onWindowClick (event) {
-    const dropdownElement = findDOMNode(this);
-    if (event.target !== dropdownElement && !dropdownElement.contains(event.target) && this.isActive()) {
-      this.hide();
-    }
-  }
+var _dropdownTrigger2 = _interopRequireDefault(_dropdownTrigger);
 
-  _onToggleClick (event) {
-    event.preventDefault();
-    if (this.isActive()) {
-      this.hide();
-    } else {
-      this.show();
-    }
-  }
+var _dropdownContent = require('./dropdown-content.js');
 
-  render () {
-    const { children, className, disabled, removeElement } = this.props;
-    // create component classes
-    const active = this.isActive();
-    const dropdownClasses = cx({
-      dropdown: true,
-      'dropdown--active': active,
-      'dropdown--disabled': disabled
-    });
-    // stick callback on trigger element
-    const boundChildren = React.Children.map(children, child => {
-      if (child.type === DropdownTrigger) {
-        const originalOnClick = child.props.onClick;
-        child = cloneElement(child, {
-          ref: 'trigger',
-          onClick: (event) => {
-            if (!disabled) {
-              this._onToggleClick(event);
-              if (originalOnClick) {
-                originalOnClick.apply(child, arguments);
-              }
-            }
-          }
-        });
-      } else if (child.type === DropdownContent && removeElement && !active) {
-        child = null;
-      }
-      return child;
-    });
-    const cleanProps = { ...this.props };
-    delete cleanProps.active;
-    delete cleanProps.onShow;
-    delete cleanProps.onHide;
-    delete cleanProps.removeElement;
 
-    return (
-      <div
-        {...cleanProps}
-        className={`${dropdownClasses} ${className}`}>
-        {boundChildren}
-      </div>
-    );
-  }
-}
+var _dropdownContent2 = _interopRequireDefault(_dropdownContent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Dropdown = function (_Component) {
+	_inherits(Dropdown, _Component);
+
+	_createClass(Dropdown, [{
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			window.addEventListener('click', this._onWindowClick);
+			window.addEventListener('touchstart', this._onWindowClick);
+		}
+	}, {
+		key: 'componentWillUnmount',
+		value: function componentWillUnmount() {
+			window.removeEventListener('click', this._onWindowClick);
+			window.removeEventListener('touchstart', this._onWindowClick);
+		}
+	}]);
+
+	function Dropdown(props) {
+		_classCallCheck(this, Dropdown);
+		var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dropdown).call(this, props));
+
+		_this.wrapperRef = _react.createRef(); //
+		_this.state = {
+			active: false
+		};
+
+		_this._onWindowClick = _this._onWindowClick.bind(_this);
+		_this._onToggleClick = _this._onToggleClick.bind(_this);
+		return _this;
+	}
+
+	_createClass(Dropdown, [{
+		key: 'isActive',
+		value: function isActive() {
+			return typeof this.props.active === 'boolean' ? this.props.active : this.state.active;
+		}
+	}, {
+		key: 'hide',
+		value: function hide() {
+			var _this2 = this;
+
+			this.setState({
+				active: false
+			}, function () {
+				if (_this2.props.onHide) {
+					_this2.props.onHide();
+				}
+			});
+		}
+	}, {
+		key: 'show',
+		value: function show() {
+			var _this3 = this;
+
+			this.setState({
+				active: true
+			}, function () {
+				if (_this3.props.onShow) {
+					_this3.props.onShow();
+				}
+			});
+		}
+	}, {
+		key: '_onWindowClick',
+		value: function _onWindowClick(event) {
+			// var dropdownElement = (0, _reactDom.findDOMNode)(this);
+			var dropdownElement = this.wrapperRef.current; //
+			if (event.target !== dropdownElement && !dropdownElement.contains(event.target) && this.isActive()) {
+				this.hide();
+			}
+		}
+	}, {
+		key: '_onToggleClick',
+		value: function _onToggleClick(event) {
+			event.preventDefault();
+			if (this.isActive()) {
+				this.hide();
+			} else {
+				this.show();
+			}
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this4 = this,
+				_arguments = arguments;
+
+			var _props = this.props;
+			var children = _props.children;
+			var className = _props.className;
+			var disabled = _props.disabled;
+			var removeElement = _props.removeElement;
+			// create component classes
+
+			var active = this.isActive();
+			var dropdownClasses = (0, _classnames2.default)({
+				dropdown: true,
+				'dropdown--active': active,
+				'dropdown--disabled': disabled
+			});
+			// stick callback on trigger element
+			var boundChildren = _react2.default.Children.map(children, function (child) {
+				if (child.type === _dropdownTrigger2.default) {
+					(function () {
+						_this4.trigger = _react.createRef();
+
+						var originalOnClick = child.props.onClick;
+						child = (0, _react.cloneElement)(child, {
+							// ref: 'trigger',
+							ref: _this4.trigger, //
+							onClick: function onClick(event) {
+								if (!disabled) {
+									_this4._onToggleClick(event);
+									if (originalOnClick) {
+										originalOnClick.apply(child, _arguments);
+									}
+								}
+							}
+						});
+					})();
+				} else if (child.type === _dropdownContent2.default && removeElement && !active) {
+					child = null;
+				}
+				return child;
+			});
+			var cleanProps = _extends({}, this.props);
+			delete cleanProps.active;
+			delete cleanProps.onShow;
+			delete cleanProps.onHide;
+			delete cleanProps.removeElement;
+
+			return _react2.default.createElement(
+				'div',
+				_extends({}, cleanProps,
+					{
+						className: dropdownClasses + ' ' + className,
+						ref: this.wrapperRef //
+					}),
+				boundChildren
+			);
+		}
+	}]);
+
+	return Dropdown;
+}(_react.Component);
 
 Dropdown.propTypes = {
-  disabled: PropTypes.bool,
-  active: PropTypes.bool,
-  onHide: PropTypes.func,
-  onShow: PropTypes.func,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  removeElement: PropTypes.bool,
-  style: PropTypes.object
+	disabled: _propTypes2.default.bool,
+	active: _propTypes2.default.bool,
+	onHide: _propTypes2.default.func,
+	onShow: _propTypes2.default.func,
+	children: _propTypes2.default.node,
+	className: _propTypes2.default.string,
+	removeElement: _propTypes2.default.bool,
+	style: _propTypes2.default.object
 };
 
 Dropdown.defaultProps = {
-  className: ''
+	className: ''
 };
 
-export { DropdownTrigger, DropdownContent };
-export default Dropdown;
+exports.DropdownTrigger = _dropdownTrigger2.default;
+exports.DropdownContent = _dropdownContent2.default;
+exports.default = Dropdown;
