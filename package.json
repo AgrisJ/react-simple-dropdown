@@ -6,8 +6,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "postpublish": "npm run clean",
-    "build": "trash lib && babel src/components --out-dir lib/components",
-    "dev": "npm-run-all --parallel watch test:browser",
+    "dev": "npm-run-all",
     "lint": "eslint src --ext .js --ext .jsx"
   },
   "repository": {
